@@ -241,6 +241,107 @@
       margin-bottom: 1rem;
     }
 
+    /* ─── Email Compose UI ─── */
+    .compose-header {
+      border: 1px solid var(--admin-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 0.6rem;
+      background: #f8fafc;
+    }
+
+    .compose-field {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.55rem 0.9rem;
+      border-bottom: 1px solid var(--admin-border);
+      font-size: 0.875rem;
+    }
+
+    .compose-field:last-child { border-bottom: none; }
+
+    .compose-field .cf-label {
+      color: #94a3b8;
+      font-weight: 600;
+      width: 58px;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .compose-field .cf-value {
+      color: #1e293b;
+      font-weight: 500;
+      font-size: 0.875rem;
+      word-break: break-all;
+    }
+
+    .compose-body {
+      position: relative;
+    }
+
+    .compose-body textarea {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid var(--admin-border);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #1e293b;
+      resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+
+    .compose-body textarea:focus {
+      outline: none;
+      border-color: var(--admin-accent);
+      box-shadow: 0 0 0 3px rgba(198,168,92,0.12);
+    }
+
+    .reply-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .compose-buttons {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn-compose {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.95rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid #dadce0;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+      background: #fff;
+    }
+
+    .btn-gmail  { color: #444746; }
+    .btn-outlook { color: #0078d4; }
+
+    .btn-compose:hover {
+      background: #f1f5f9;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+
     .admin-label {
       font-size: 0.75rem;
       font-weight: 700;
@@ -374,11 +475,52 @@
       </div>
       <div class="modal-footer">
         <div class="reply-area">
-          <span class="admin-label">Send Official Reply</span>
-          <textarea id="reply-text" rows="4" placeholder="Write your legal response here..."></textarea>
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
-            <p id="reply-send-status" style="font-size: 0.85rem; margin: 0; flex: 1;"></p>
-            <button class="btn btn-primary" id="send-reply-btn">Send &amp; Update Ticket</button>
+          <span class="admin-label">Compose Official Reply</span>
+
+          <!-- Email-draft style header: To / Subject -->
+          <div class="compose-header">
+            <div class="compose-field">
+              <span class="cf-label">To:</span>
+              <span class="cf-value" id="compose-to">&mdash;</span>
+            </div>
+            <div class="compose-field">
+              <span class="cf-label">Subject:</span>
+              <span class="cf-value" id="compose-subject">&mdash;</span>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="compose-body">
+            <textarea id="reply-text" rows="5"
+              placeholder="Write your legal response here…"></textarea>
+          </div>
+
+          <!-- Action bar -->
+          <div class="reply-actions">
+            <p id="reply-send-status" style="font-size:0.82rem;margin:0;flex:1;min-width:160px;"></p>
+            <div class="compose-buttons">
+
+              <!-- Open in Gmail -->
+              <button id="open-gmail-btn" class="btn-compose btn-gmail"
+                      title="Open as draft in Gmail">
+                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#EA4335" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                </svg>
+                Open in Gmail
+              </button>
+
+              <!-- Open in Outlook -->
+              <button id="open-outlook-btn" class="btn-compose btn-outlook"
+                      title="Open as draft in Outlook Web">
+                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#0078d4" d="M24 7.387v9.94l-4.296-3.206V10.62L24 7.387zM0 7.387l4.296 3.233v3.5L0 17.327V7.387zm14.296 8.34L12 17.34l-2.296-1.613L0 22h24L14.296 15.727zM12 15L0 6.613V6l12 8.387L24 6v.613L12 15z"/>
+                </svg>
+                Open in Outlook
+              </button>
+
+              <!-- EmailJS quick-send -->
+              <button class="btn btn-primary" id="send-reply-btn">Send &amp; Update Ticket</button>
+            </div>
           </div>
         </div>
       </div>

@@ -115,13 +115,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     currentTicketId = ticketId;
 
-    document.getElementById('client-name').textContent = ticket.name;
-    document.getElementById('client-email').textContent = ticket.email;
-    document.getElementById('client-phone').textContent = ticket.phone;
+    // ── Ticket detail fields ─────────────────────────
+    document.getElementById('client-name').textContent    = ticket.name;
+    document.getElementById('client-email').textContent   = ticket.email;
+    document.getElementById('client-phone').textContent   = ticket.phone;
     document.getElementById('ticket-service').textContent = ticket.service;
     document.getElementById('client-message').textContent = ticket.message;
-    document.getElementById('modal-ticket-title').textContent = `Ticket ${ticket.id}`;
+    document.getElementById('modal-ticket-title').textContent = `Ticket #${ticket.id.substr(-4)}`;
 
+    // ── Compose header (email-draft style) ───────────
+    const ref     = ticket.id.substr(-4);
+    const subject = `Official Response: HLM Law Advocates — Ref #${ref}`;
+    document.getElementById('compose-to').textContent      = ticket.email;
+    document.getElementById('compose-subject').textContent = subject;
+
+    // Pre-fill body with a polished reply template
+    const existingText = document.getElementById('reply-text').value.trim();
+    if (!existingText) {
+      document.getElementById('reply-text').value =
+        `Dear ${ticket.name},\n\nThank you for reaching out to HLM Law Advocates regarding your inquiry about ${ticket.service}.\n\n[Your response here]\n\nBest regards,\nHLM Law Advocates Team`;
+    }
+
+    // ── Reply history ────────────────────────────────
     const historyDiv = document.getElementById('reply-history');
     historyDiv.innerHTML = '';
     ticket.history.forEach(history => {
@@ -139,8 +154,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
   closeModal.addEventListener('click', () => {
     ticketModal.style.display = 'none';
-    replyText.value = '';
+    // Clear the body so it gets re-generated fresh on next open
+    document.getElementById('reply-text').value = '';
     currentTicketId = null;
+  });
+
+  // ═══════════════════════════════════════════════════
+  // GMAIL & OUTLOOK DRAFT HELPERS
+  // ═══════════════════════════════════════════════════
+  function getComposeData() {
+    if (!currentTicketId) return null;
+    const freshTickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
+    const ticket = freshTickets.find(t => t.id === currentTicketId);
+    if (!ticket) return null;
+    const bodyText = document.getElementById('reply-text').value.trim();
+    const subject  = `Official Response: HLM Law Advocates — Ref #${ticket.id.substr(-4)}`;
+    return { ticket, subject, bodyText };
+  }
+
+  document.getElementById('open-gmail-btn').addEventListener('click', () => {
+    const d = getComposeData();
+    if (!d) return;
+    const url = 'https://mail.google.com/mail/?view=cm'
+      + '&to='   + encodeURIComponent(d.ticket.email)
+      + '&su='   + encodeURIComponent(d.subject)
+      + '&body=' + encodeURIComponent(d.bodyText);
+    window.open(url, '_blank', 'noopener');
+  });
+
+  document.getElementById('open-outlook-btn').addEventListener('click', () => {
+    const d = getComposeData();
+    if (!d) return;
+    const url = 'https://outlook.office.com/mail/deeplink/compose'
+      + '?to='      + encodeURIComponent(d.ticket.email)
+      + '&subject=' + encodeURIComponent(d.subject)
+      + '&body='    + encodeURIComponent(d.bodyText);
+    window.open(url, '_blank', 'noopener');
   });
 
   replyBtn.addEventListener('click', () => {
@@ -177,9 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
     statusEl.style.color = '';
 
     const templateParams = {
-      to_name: targetTicket.name,
-      to_email: targetTicket.email,
-      service: targetTicket.service,
+      to_name:    targetTicket.name,
+      to_email:   targetTicket.email,   // must match {{to_email}} in your EmailJS template's "To" field
+      service:    targetTicket.service,
       reply_text: text,
       ticket_ref: targetTicket.id.substr(-4)
     };
@@ -194,16 +243,18 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => {
         replyBtn.textContent = originalLabel;
         replyBtn.disabled = false;
-        statusEl.textContent = `⚠ Reply saved locally but email failed: ${err.text || err.message || 'Unknown error'}`;
+        const errMsg = err?.text || err?.message || JSON.stringify(err) || 'Unknown error';
+        statusEl.textContent = `⚠ Reply saved locally but email failed: ${errMsg}`;
         statusEl.style.color = '#b91c1c';
         console.error('EmailJS admin reply error:', err);
       });
 
-    // 4. UI Refresh (happens immediately regardless of email result)
+    // 4. UI Refresh
     renderTickets();
     updateStats();
     openTicket(currentTicketId);
-    replyText.value = '';
+    // Clear body after refresh (openTicket pre-fills only when empty)
+    document.getElementById('reply-text').value = '';
   });
 
   // Initialization
