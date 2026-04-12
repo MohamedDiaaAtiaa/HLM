@@ -10,18 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── DOM References ───
   const loginOverlay = document.getElementById('login-overlay');
-  const adminLayout  = document.getElementById('admin-layout');
-  const loginForm    = document.getElementById('login-form');
-  const loginError   = document.getElementById('login-error');
-  const ticketsBody  = document.getElementById('tickets-body');
-  const noTickets    = document.getElementById('no-tickets');
-  const logoutBtn    = document.getElementById('logout-btn');
+  const adminLayout = document.getElementById('admin-layout');
+  const loginForm = document.getElementById('login-form');
+  const loginError = document.getElementById('login-error');
+  const ticketsBody = document.getElementById('tickets-body');
+  const noTickets = document.getElementById('no-tickets');
+  const logoutBtn = document.getElementById('logout-btn');
 
   // Modal References
-  const ticketModal  = document.getElementById('ticket-modal-overlay');
-  const closeModal   = document.getElementById('close-modal');
-  const replyBtn     = document.getElementById('send-reply-btn');
-  const replyText    = document.getElementById('reply-text');
+  const ticketModal = document.getElementById('ticket-modal-overlay');
+  const closeModal = document.getElementById('close-modal');
+  const replyBtn = document.getElementById('send-reply-btn');
+  const replyText = document.getElementById('reply-text');
 
   // ═══════════════════════════════════════════════════
   // EMAILJS CONFIGURATION  
@@ -29,9 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Template variable names for EMAILJS_TEMPLATE_REPLY:
   //   {{to_name}}  {{to_email}}  {{service}}  {{reply_text}}  {{ticket_ref}}
   // ═══════════════════════════════════════════════════
-  const EMAILJS_PUBLIC_KEY    = 'YOUR_PUBLIC_KEY';     // same as script.js
-  const EMAILJS_SERVICE_ID    = 'YOUR_SERVICE_ID';     // same as script.js
-  const EMAILJS_TEMPLATE_REPLY = 'YOUR_REPLY_TEMPLATE_ID'; // separate template for admin replies
+  const EMAILJS_PUBLIC_KEY = '8llg2NTxGXEW-PCtZ';     // same as script.js
+  const EMAILJS_SERVICE_ID = 'service_zcq96si';     // same as script.js
+  const EMAILJS_TEMPLATE_REPLY = 'template_p40qbde'; // separate template for admin replies
 
   emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
@@ -149,10 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let freshTickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
     const ticketIndex = freshTickets.findIndex(t => t.id === currentTicketId);
-    
+
     if (ticketIndex === -1) {
-        alert("Error: Ticket not found.");
-        return;
+      alert("Error: Ticket not found.");
+      return;
     }
 
     const targetTicket = freshTickets[ticketIndex];
@@ -172,14 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = document.getElementById('reply-send-status');
 
     replyBtn.textContent = 'Sending…';
-    replyBtn.disabled    = true;
+    replyBtn.disabled = true;
     statusEl.textContent = '';
     statusEl.style.color = '';
 
     const templateParams = {
-      to_name:    targetTicket.name,
-      to_email:   targetTicket.email,
-      service:    targetTicket.service,
+      to_name: targetTicket.name,
+      to_email: targetTicket.email,
+      service: targetTicket.service,
       reply_text: text,
       ticket_ref: targetTicket.id.substr(-4)
     };
@@ -187,13 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_REPLY, templateParams)
       .then(() => {
         replyBtn.textContent = originalLabel;
-        replyBtn.disabled    = false;
+        replyBtn.disabled = false;
         statusEl.textContent = `✓ Reply emailed to ${targetTicket.email} successfully.`;
         statusEl.style.color = '#166534';
       })
       .catch(err => {
         replyBtn.textContent = originalLabel;
-        replyBtn.disabled    = false;
+        replyBtn.disabled = false;
         statusEl.textContent = `⚠ Reply saved locally but email failed: ${err.text || err.message || 'Unknown error'}`;
         statusEl.style.color = '#b91c1c';
         console.error('EmailJS admin reply error:', err);

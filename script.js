@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Go to Account → API Keys → copy your Public Key
   // Then paste all three below:
   // ═══════════════════════════════════════════════════
-  const EMAILJS_PUBLIC_KEY       = 'YOUR_PUBLIC_KEY';        // e.g. 'abc123XYZ'
-  const EMAILJS_SERVICE_ID       = 'YOUR_SERVICE_ID';        // e.g. 'service_xxxxxx'
-  const EMAILJS_TEMPLATE_CONTACT = 'YOUR_TEMPLATE_ID';       // e.g. 'template_xxxxxx'
+  const EMAILJS_PUBLIC_KEY = '8llg2NTxGXEW-PCtZ';        // e.g. 'abc123XYZ'
+  const EMAILJS_SERVICE_ID = 'service_zcq96si';        // e.g. 'service_xxxxxx'
+  const EMAILJS_TEMPLATE_CONTACT = 'template_p40qbde';       // e.g. 'template_xxxxxx'
 
   emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
@@ -138,9 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Close menu on clicking outside
   document.addEventListener('click', (e) => {
-    if (navLinks.classList.contains('open') && 
-        !navLinks.contains(e.target) && 
-        !menuBtn.contains(e.target)) {
+    if (navLinks.classList.contains('open') &&
+      !navLinks.contains(e.target) &&
+      !menuBtn.contains(e.target)) {
       menuBtn.classList.remove('active');
       navLinks.classList.remove('open');
       body.style.overflow = '';
@@ -309,34 +309,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const submitBtn = contactForm.querySelector('.btn-submit');
       const statusDiv = document.getElementById('formStatus');
-      const btnText   = submitBtn.querySelector('span');
+      const btnText = submitBtn.querySelector('span');
 
       const originalText = btnText.textContent;
-      const sendingText  = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
-      const successText  = currentLang === 'ar'
+      const sendingText = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
+      const successText = currentLang === 'ar'
         ? '✓ تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.'
         : '✓ Your message was sent successfully. We will be in touch soon.';
-      const errorText    = currentLang === 'ar'
+      const errorText = currentLang === 'ar'
         ? '⚠ حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة.'
         : '⚠ Something went wrong. Please try again or contact us directly.';
 
       // ── Loading state ──────────────────────────────
-      btnText.textContent           = sendingText;
-      submitBtn.style.opacity       = '0.7';
+      btnText.textContent = sendingText;
+      submitBtn.style.opacity = '0.7';
       submitBtn.style.pointerEvents = 'none';
-      statusDiv.textContent         = '';
-      statusDiv.className           = 'form-status';
+      statusDiv.textContent = '';
+      statusDiv.className = 'form-status';
 
       // ── Collect & save ticket ──────────────────────
       const ticketData = {
-        id:      'TKT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-        name:    document.getElementById('name').value.trim(),
-        phone:   document.getElementById('phone').value.trim(),
-        email:   document.getElementById('email').value.trim(),
+        id: 'TKT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
         service: document.getElementById('service').value,
         message: document.getElementById('message').value.trim(),
-        date:    new Date().toLocaleString(),
-        status:  'new',
+        date: new Date().toLocaleString(),
+        status: 'new',
         history: []
       };
 
@@ -348,23 +348,23 @@ document.addEventListener('DOMContentLoaded', () => {
       // Template variables must match the placeholders inside your EmailJS template:
       //   {{from_name}}  {{from_email}}  {{phone}}  {{service}}  {{message}}  {{ticket_id}}
       const templateParams = {
-        from_name:  ticketData.name,
+        from_name: ticketData.name,
         from_email: ticketData.email,
-        phone:      ticketData.phone,
-        service:    ticketData.service,
-        message:    ticketData.message,
-        ticket_id:  ticketData.id,
-        to_email:   'info@hlm-legal.com'
+        phone: ticketData.phone,
+        service: ticketData.service,
+        message: ticketData.message,
+        ticket_id: ticketData.id,
+        to_email: 'info@hlm-legal.com'
       };
 
       try {
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CONTACT, templateParams);
 
         // ── Success ────────────────────────────────
-        btnText.textContent           = originalText;
-        submitBtn.style.opacity       = '1';
+        btnText.textContent = originalText;
+        submitBtn.style.opacity = '1';
         submitBtn.style.pointerEvents = 'auto';
-        statusDiv.textContent         = successText;
+        statusDiv.textContent = successText;
         statusDiv.classList.add('success');
         contactForm.reset();
 
@@ -376,10 +376,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         // ── Failure ────────────────────────────────
         console.error('EmailJS send failed:', err);
-        btnText.textContent           = originalText;
-        submitBtn.style.opacity       = '1';
+        btnText.textContent = originalText;
+        submitBtn.style.opacity = '1';
         submitBtn.style.pointerEvents = 'auto';
-        statusDiv.textContent         = errorText;
+        statusDiv.textContent = errorText;
         statusDiv.classList.add('error');
 
         setTimeout(() => {
