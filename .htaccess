@@ -1,0 +1,20 @@
+# ═══════════════════════════════════════════════════════════
+# HLM LAW ADVOCATES — Clean URLs Configuration
+# ═══════════════════════════════════════════════════════════
+
+RewriteEngine On
+
+# 1. Redirect index.html to /
+# This ensures that if someone types index.html, they are moved to the clean URL
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
+RewriteRule ^index\.html$ / [R=301,L]
+
+# 2. Map clean URLs to .html files
+# This allows you to use hlm-legal.com/about instead of hlm-legal.com/about.html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# 3. Force HTTPS (Uncomment the lines below when your SSL is active)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
