@@ -308,7 +308,27 @@ document.addEventListener('DOMContentLoaded', () => {
       statusDiv.textContent = '';
       statusDiv.className = 'form-status';
 
-      // Mock API call
+      // ─── TICKET SYSTEM INTEGRATION ───
+      const ticketData = {
+        id: 'TKT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        service: document.getElementById('service').value,
+        message: document.getElementById('message').value,
+        date: new Date().toLocaleString(),
+        status: 'new',
+        history: []
+      };
+
+      // Save to persistence (Local Storage for this demo)
+      const tickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
+      tickets.unshift(ticketData);
+      localStorage.setItem('hlm_tickets', JSON.stringify(tickets));
+
+      // Mock API call to send email to info@hlm-legal.com
+      console.log('Sending email to info@hlm-legal.com...', ticketData);
+
       setTimeout(() => {
         btnText.textContent = originalText;
         submitBtn.style.opacity = '1';
