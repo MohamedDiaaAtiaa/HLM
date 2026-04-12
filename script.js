@@ -326,8 +326,19 @@ document.addEventListener('DOMContentLoaded', () => {
       tickets.unshift(ticketData);
       localStorage.setItem('hlm_tickets', JSON.stringify(tickets));
 
-      // Mock API call to send email to info@hlm-legal.com
-      console.log('Sending email to info@hlm-legal.com...', ticketData);
+      // Send automatic notification to info@hlm-legal.com
+      fetch('sender.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: 'info@hlm-legal.com',
+          subject: `New Client Inquiry: ${ticketData.name}`,
+          message: `You have received a new inquiry via the website.\n\nName: ${ticketData.name}\nEmail: ${ticketData.email}\nPhone: ${ticketData.phone}\nService: ${ticketData.service}\n\nMessage:\n${ticketData.message}`,
+          from_name: 'HLM Website'
+        })
+      });
+
+      console.log('Sending automatic notification to info@hlm-legal.com...');
 
       setTimeout(() => {
         btnText.textContent = originalText;

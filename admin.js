@@ -155,11 +155,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Save back to local storage
     localStorage.setItem('hlm_tickets', JSON.stringify(freshTickets));
 
-    // 3. Format and Send Email to User (Mailto Relay)
-    const subject = encodeURIComponent(`Official Response: HLM Law Advocates - Ref #${targetTicket.id.substr(-4)}`);
-    const body = encodeURIComponent(`Dear ${targetTicket.name},\n\nRegarding your inquiry about ${targetTicket.service}:\n\n${text}\n\nBest regards,\nHLM Law Advocates Team`);
-    
-    window.open(`mailto:${targetTicket.email}?subject=${subject}&body=${body}`);
+    // 3. Send Automatic Email to User via Relay
+    fetch('sender.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: targetTicket.email,
+        subject: `Official Response: HLM Law Advocates - Ref #${targetTicket.id.substr(-4)}`,
+        message: `Dear ${targetTicket.name},\n\nRegarding your inquiry about ${targetTicket.service}:\n\n${text}\n\nBest regards,\nHLM Law Advocates Team`,
+        from_name: 'HLM Law Advocates'
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Email sent automatically via background relay.');
+      } else {
+        console.error('Relay error:', data.error);
+      }
+    });
 
     // 4. UI Refresh
     renderTickets();
@@ -167,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     openTicket(currentTicketId); // Refresh modal content
     replyText.value = '';
 
-    alert('Response drafted! Please send the opened email to finalize communication with ' + targetTicket.email);
+    alert('The reply has been sent automatically to ' + targetTicket.email);
   });
 
   // Initialization
