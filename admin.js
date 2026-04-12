@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ─── State ───
   let tickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
-  let currentTicket = null;
+  let currentTicketId = null;
 
   // ─── DOM References ───
   const loginOverlay = document.getElementById('login-overlay');
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     noTickets.style.display = 'none';
-    tickets.forEach((ticket, index) => {
+    tickets.forEach((ticket) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>#${ticket.id.substr(-4)}</td>
@@ -74,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${ticket.service}</td>
         <td>${ticket.date.split(',')[0]}</td>
         <td><span class="status-badge status-${ticket.status}">${ticket.status.toUpperCase()}</span></td>
-        <td><button class="btn-view" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer;">View</button></td>
+        <td><button class="btn-view" data-id="${ticket.id}" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer;">View</button></td>
       `;
 
-      tr.querySelector('.btn-view').addEventListener('click', () => openTicket(index));
+      tr.querySelector('.btn-view').addEventListener('click', () => openTicket(ticket.id));
       tr.addEventListener('click', (e) => {
-        if (e.target.tagName !== 'BUTTON') openTicket(index);
+        if (e.target.tagName !== 'BUTTON') openTicket(ticket.id);
       });
 
       ticketsBody.appendChild(tr);
@@ -87,17 +87,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateStats() {
-    document.getElementById('stat-total').textContent = tickets.length;
-    document.getElementById('stat-new').textContent = tickets.filter(t => t.status === 'new').length;
-    document.getElementById('stat-replied').textContent = tickets.filter(t => t.status === 'replied').length;
+    const freshTickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
+    document.getElementById('stat-total').textContent = freshTickets.length;
+    document.getElementById('stat-new').textContent = freshTickets.filter(t => t.status === 'new').length;
+    document.getElementById('stat-replied').textContent = freshTickets.filter(t => t.status === 'replied').length;
   }
 
   // ═══════════════════════════════════════════════════
   // TICKET DETAILS & REPLY
   // ═══════════════════════════════════════════════════
-  function openTicket(index) {
-    currentTicket = tickets[index];
-    const ticket = currentTicket;
+  function openTicket(ticketId) {
+    const freshTickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
+    const ticket = freshTickets.find(t => t.id === ticketId);
+    if (!ticket) return;
+
+    currentTicketId = ticketId;
 
     document.getElementById('client-name').textContent = ticket.name;
     document.getElementById('client-email').textContent = ticket.email;
@@ -124,34 +128,46 @@ document.addEventListener('DOMContentLoaded', () => {
   closeModal.addEventListener('click', () => {
     ticketModal.style.display = 'none';
     replyText.value = '';
+    currentTicketId = null;
   });
 
   replyBtn.addEventListener('click', () => {
     const text = replyText.value.trim();
-    if (!text) return;
+    if (!text || !currentTicketId) return;
 
-    // Update current ticket
-    currentTicket.status = 'replied';
-    currentTicket.history.push({
+    let freshTickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
+    const ticketIndex = freshTickets.findIndex(t => t.id === currentTicketId);
+    
+    if (ticketIndex === -1) {
+        alert("Error: Ticket not found.");
+        return;
+    }
+
+    const targetTicket = freshTickets[ticketIndex];
+
+    // 1. Update status and history
+    targetTicket.status = 'replied';
+    targetTicket.history.push({
       text: text,
       date: new Date().toLocaleString()
     });
 
-    // Save back to local storage
-    localStorage.setItem('hlm_tickets', JSON.stringify(tickets));
+    // 2. Save back to local storage
+    localStorage.setItem('hlm_tickets', JSON.stringify(freshTickets));
 
-    // Simulate sending email to user
-    console.log(`Sending official reply to ${currentTicket.email}...`);
-    console.log(`Subject: Official Response from HLM Law Advocates regarding ${currentTicket.service}`);
-    console.log(`Body: ${text}`);
+    // 3. Format and Send Email to User (Mailto Relay)
+    const subject = encodeURIComponent(`Official Response: HLM Law Advocates - Ref #${targetTicket.id.substr(-4)}`);
+    const body = encodeURIComponent(`Dear ${targetTicket.name},\n\nRegarding your inquiry about ${targetTicket.service}:\n\n${text}\n\nBest regards,\nHLM Law Advocates Team`);
+    
+    window.open(`mailto:${targetTicket.email}?subject=${subject}&body=${body}`);
 
-    // UI Refresh
+    // 4. UI Refresh
     renderTickets();
     updateStats();
-    openTicket(tickets.indexOf(currentTicket)); // Refresh modal content
+    openTicket(currentTicketId); // Refresh modal content
     replyText.value = '';
 
-    alert('Reply sent successfully to ' + currentTicket.email);
+    alert('Response drafted! Please send the opened email to finalize communication with ' + targetTicket.email);
   });
 
   // Initialization
