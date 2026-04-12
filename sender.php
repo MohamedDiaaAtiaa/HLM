@@ -1,65 +1,141 @@
 <?php
 /* ═══════════════════════════════════════════════════════════
-   HLM LAW ADVOCATES — Automatic Email Relay
-   Handles background delivery for contact form and admin replies
+   HLM LAW ADVOCATES — Email Relay (sender.php)
+   Handles contact form notifications & admin replies
    ═══════════════════════════════════════════════════════════ */
 
-header('Content-Type: application/json');
+// ── 1. Always output JSON, even on fatal errors ───────────
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=UTF-8');
+        }
+        echo json_encode([
+            'success' => false,
+            'error'   => 'PHP Fatal: ' . $error['message'] . ' in ' . $error['file'] . ':' . $error['line']
+        ]);
+    }
+});
 
+// ── 2. Error config & CORS ────────────────────────────────
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+
+$allowed_origins = [
+    'https://hlm-legal.com',
+    'https://www.hlm-legal.com',
+    'http://localhost',
+    'http://127.0.0.1',
+];
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowed_origins, true)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header('Access-Control-Allow-Origin: *');
+}
+
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+header('Access-Control-Max-Age: 86400');
+header('Content-Type: application/json; charset=UTF-8');
+
+// ── 3. Handle CORS preflight ─────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
+// ── 4. Reject non-POST ───────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die(json_encode(['success' => false, 'error' => 'Invalid method']));
+    http_response_code(405);
+    echo json_encode(['success' => false, 'error' => 'Method Not Allowed. Use POST.']);
+    exit;
 }
 
-// Get the JSON data
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
+// ── 5. Parse JSON body ───────────────────────────────────
+$raw  = file_get_contents('php://input');
+$data = json_decode($raw, true);
 
-if (!$data) {
-    die(json_encode(['success' => false, 'error' => 'No data received']));
+if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Invalid or empty JSON body: ' . json_last_error_msg()]);
+    exit;
 }
 
-$to = $data['to'] ?? 'info@hlm-legal.com';
-$subject = $data['subject'] ?? 'New Inquiry from HLM Website';
-$message = $data['message'] ?? '';
-$from_name = $data['from_name'] ?? 'HLM Law Advocates';
-$from_email = 'info@hlm-legal.com';
+// ── 6. Sanitize ──────────────────────────────────────────
+function sanitize(string $val): string {
+    return trim(str_replace(["\r", "\n", "\t"], ' ', strip_tags($val)));
+}
 
-// Format HTML Email
-$headers = "MIME-Version: 1.0" . "\r\n";
-$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-$headers .= "From: $from_name <$from_email>" . "\r\n";
-$headers .= "Reply-To: $from_email" . "\r\n";
+$to        = filter_var($data['to'] ?? '', FILTER_VALIDATE_EMAIL);
+$subject   = sanitize($data['subject']   ?? 'New Inquiry — HLM Law Advocates');
+$body_text = sanitize($data['message']   ?? '');
+$from_name = sanitize($data['from_name'] ?? 'HLM Website');
+$firm_email = 'info@hlm-legal.com';
 
-$email_body = "
-<html>
+if (!$to) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Invalid or missing recipient email address.']);
+    exit;
+}
+if (empty($body_text)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Message body cannot be empty.']);
+    exit;
+}
+
+// ── 7. Build HTML email ──────────────────────────────────
+$year         = date('Y');
+$html_message = nl2br(htmlspecialchars($body_text, ENT_QUOTES, 'UTF-8'));
+
+$email_body = '<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-    <style>
-        body { font-family: 'Inter', Arial, sans-serif; color: #1e293b; line-height: 1.6; }
-        .container { padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 600px; }
-        .header { border-bottom: 2px solid #C6A85C; padding-bottom: 10px; margin-bottom: 20px; }
-        .footer { margin-top: 30px; font-size: 12px; color: #64748b; }
-    </style>
+  <meta charset="UTF-8">
+  <style>
+    body  { font-family: "Segoe UI", Arial, sans-serif; background:#f8fafc; margin:0; padding:0; color:#1e293b; }
+    .wrap { max-width:620px; margin:30px auto; background:#fff; border-radius:8px;
+            border:1px solid #e2e8f0; box-shadow:0 4px 20px rgba(0,0,0,.06); overflow:hidden; }
+    .hdr  { background:#0B1C2C; padding:24px 32px; }
+    .hdr h2 { color:#C6A85C; margin:0; font-size:1.2rem; letter-spacing:.05em; }
+    .hdr p  { color:rgba(255,255,255,.6); margin:4px 0 0; font-size:.8rem; }
+    .bdy  { padding:32px; line-height:1.8; font-size:.95rem; color:#334155; }
+    .ftr  { background:#f1f5f9; padding:16px 32px; font-size:.78rem; color:#64748b;
+            border-top:1px solid #e2e8f0; text-align:center; }
+  </style>
 </head>
 <body>
-    <div class='container'>
-        <div class='header'>
-            <h2 style='color: #0B1C2C;'>HLM Law Advocates</h2>
-        </div>
-        <div>
-            " . nl2br(htmlspecialchars($message)) . "
-        </div>
-        <div class='footer'>
-            &copy; " . date('Y') . " HLM Law Advocates & Legal Consultants. All rights reserved.
-        </div>
+  <div class="wrap">
+    <div class="hdr">
+      <h2>H.L.M &mdash; &#x62D;&#x633;&#x646; &#x648;&#x644;&#x642;&#x645;&#x627;&#x646; &#x648;&#x645;&#x631;&#x627;&#x62F;</h2>
+      <p>LAW ADVOCATES &amp; LEGAL CONSULTANTS</p>
     </div>
+    <div class="bdy">' . $html_message . '</div>
+    <div class="ftr">&copy; ' . $year . ' HLM Law Advocates &amp; Legal Consultants &mdash; All rights reserved.</div>
+  </div>
 </body>
-</html>
-";
+</html>';
 
-// Send the email
-if (mail($to, $subject, $email_body, $headers)) {
-    echo json_encode(['success' => true]);
+// ── 8. Mail headers ──────────────────────────────────────
+$headers  = "MIME-Version: 1.0\r\n";
+$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+$headers .= "From: =?UTF-8?B?" . base64_encode($from_name) . "?= <$firm_email>\r\n";
+$headers .= "Reply-To: $firm_email\r\n";
+$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+$headers .= "X-Priority: 1\r\n";
+
+// ── 9. Send & respond ────────────────────────────────────
+$sent = mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $email_body, $headers);
+
+if ($sent) {
+    echo json_encode(['success' => true, 'message' => 'Email delivered successfully.']);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Server failed to send email']);
+    $last = error_get_last();
+    $detail = $last ? $last['message'] : 'mail() returned false — check server mail configuration (sendmail/SMTP).';
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => $detail]);
 }
 ?>

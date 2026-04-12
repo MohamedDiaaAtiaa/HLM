@@ -10,18 +10,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── DOM References ───
   const loginOverlay = document.getElementById('login-overlay');
-  const adminLayout = document.getElementById('admin-layout');
-  const loginForm = document.getElementById('login-form');
-  const loginError = document.getElementById('login-error');
-  const ticketsBody = document.getElementById('tickets-body');
-  const noTickets = document.getElementById('no-tickets');
-  const logoutBtn = document.getElementById('logout-btn');
+  const adminLayout  = document.getElementById('admin-layout');
+  const loginForm    = document.getElementById('login-form');
+  const loginError   = document.getElementById('login-error');
+  const ticketsBody  = document.getElementById('tickets-body');
+  const noTickets    = document.getElementById('no-tickets');
+  const logoutBtn    = document.getElementById('logout-btn');
 
   // Modal References
-  const ticketModal = document.getElementById('ticket-modal-overlay');
-  const closeModal = document.getElementById('close-modal');
-  const replyBtn = document.getElementById('send-reply-btn');
-  const replyText = document.getElementById('reply-text');
+  const ticketModal  = document.getElementById('ticket-modal-overlay');
+  const closeModal   = document.getElementById('close-modal');
+  const replyBtn     = document.getElementById('send-reply-btn');
+  const replyText    = document.getElementById('reply-text');
+
+  // ─── Helper: safe JSON fetch ─────────────────────────────────
+  // Reads the raw body text first so we never crash on a non-JSON
+  // error page (e.g. a 405 HTML page causing "Unexpected end of JSON")
+  async function safePost(url, payload) {
+    const res  = await fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+    const text = await res.text();
+    try {
+      return { ok: res.ok, status: res.status, data: JSON.parse(text) };
+    } catch (_) {
+      return { ok: false, status: res.status, data: { success: false, error: `Server returned HTTP ${res.status}: ${text.slice(0, 200)}` } };
+    }
+  }
 
   // ═══════════════════════════════════════════════════
   // AUTHENTICATION
@@ -156,32 +173,47 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('hlm_tickets', JSON.stringify(freshTickets));
 
     // 3. Send Automatic Email to User via Relay
-    fetch('sender.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: targetTicket.email,
-        subject: `Official Response: HLM Law Advocates - Ref #${targetTicket.id.substr(-4)}`,
-        message: `Dear ${targetTicket.name},\n\nRegarding your inquiry about ${targetTicket.service}:\n\n${text}\n\nBest regards,\nHLM Law Advocates Team`,
-        from_name: 'HLM Law Advocates'
-      })
+    const originalLabel = replyBtn.textContent;
+    const statusEl = document.getElementById('reply-send-status');
+
+    replyBtn.textContent = 'Sending…';
+    replyBtn.disabled    = true;
+    statusEl.textContent = '';
+    statusEl.style.color = '';
+
+    safePost('sender.php', {
+      to:        targetTicket.email,
+      subject:   `Official Response: HLM Law Advocates — Ref #${targetTicket.id.substr(-4)}`,
+      message:   `Dear ${targetTicket.name},\n\nRegarding your inquiry about ${targetTicket.service}:\n\n${text}\n\nBest regards,\nHLM Law Advocates Team`,
+      from_name: 'HLM Law Advocates'
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        console.log('Email sent automatically via background relay.');
+    .then(({ ok, data }) => {
+      replyBtn.textContent = originalLabel;
+      replyBtn.disabled    = false;
+
+      if (ok && data.success) {
+        statusEl.textContent = `✓ Reply emailed to ${targetTicket.email} successfully.`;
+        statusEl.style.color = '#166534';
+        console.log('Admin reply emailed:', data.message);
       } else {
-        console.error('Relay error:', data.error);
+        statusEl.textContent = `⚠ Reply saved locally but email failed: ${data.error || 'Unknown error'}`;
+        statusEl.style.color = '#b91c1c';
+        console.error('Email relay error:', data.error);
       }
+    })
+    .catch(networkErr => {
+      replyBtn.textContent = originalLabel;
+      replyBtn.disabled    = false;
+      statusEl.textContent = `⚠ Network error — reply saved locally but email not sent: ${networkErr.message}`;
+      statusEl.style.color = '#b91c1c';
+      console.error('Fetch failed:', networkErr);
     });
 
-    // 4. UI Refresh
+    // 4. UI Refresh (happens immediately regardless of email result)
     renderTickets();
     updateStats();
-    openTicket(currentTicketId); // Refresh modal content
+    openTicket(currentTicketId);
     replyText.value = '';
-
-    alert('The reply has been sent automatically to ' + targetTicket.email);
   });
 
   // Initialization

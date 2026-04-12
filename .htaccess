@@ -13,6 +13,7 @@ RewriteRule ^index\.html$ / [R=301,L]
 # This allows you to use hlm-legal.com/about instead of hlm-legal.com/about.html
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}      !\.php$ [NC]
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
 # 3. Specific mapping for /admin to admin.html
