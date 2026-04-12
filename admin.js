@@ -23,22 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const replyBtn     = document.getElementById('send-reply-btn');
   const replyText    = document.getElementById('reply-text');
 
-  // ─── Helper: safe JSON fetch ─────────────────────────────────
-  // Reads the raw body text first so we never crash on a non-JSON
-  // error page (e.g. a 405 HTML page causing "Unexpected end of JSON")
-  async function safePost(url, payload) {
-    const res  = await fetch(url, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload)
-    });
-    const text = await res.text();
-    try {
-      return { ok: res.ok, status: res.status, data: JSON.parse(text) };
-    } catch (_) {
-      return { ok: false, status: res.status, data: { success: false, error: `Server returned HTTP ${res.status}: ${text.slice(0, 200)}` } };
-    }
-  }
+  // ═══════════════════════════════════════════════════
+  // EMAILJS CONFIGURATION  
+  // Uses the same credentials as script.js — keep in sync.
+  // Template variable names for EMAILJS_TEMPLATE_REPLY:
+  //   {{to_name}}  {{to_email}}  {{service}}  {{reply_text}}  {{ticket_ref}}
+  // ═══════════════════════════════════════════════════
+  const EMAILJS_PUBLIC_KEY    = 'YOUR_PUBLIC_KEY';     // same as script.js
+  const EMAILJS_SERVICE_ID    = 'YOUR_SERVICE_ID';     // same as script.js
+  const EMAILJS_TEMPLATE_REPLY = 'YOUR_REPLY_TEMPLATE_ID'; // separate template for admin replies
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
   // ═══════════════════════════════════════════════════
   // AUTHENTICATION
@@ -172,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Save back to local storage
     localStorage.setItem('hlm_tickets', JSON.stringify(freshTickets));
 
-    // 3. Send Automatic Email to User via Relay
+    // 3. Send reply email via EmailJS
     const originalLabel = replyBtn.textContent;
     const statusEl = document.getElementById('reply-send-status');
 
@@ -181,33 +176,28 @@ document.addEventListener('DOMContentLoaded', () => {
     statusEl.textContent = '';
     statusEl.style.color = '';
 
-    safePost('sender.php', {
-      to:        targetTicket.email,
-      subject:   `Official Response: HLM Law Advocates — Ref #${targetTicket.id.substr(-4)}`,
-      message:   `Dear ${targetTicket.name},\n\nRegarding your inquiry about ${targetTicket.service}:\n\n${text}\n\nBest regards,\nHLM Law Advocates Team`,
-      from_name: 'HLM Law Advocates'
-    })
-    .then(({ ok, data }) => {
-      replyBtn.textContent = originalLabel;
-      replyBtn.disabled    = false;
+    const templateParams = {
+      to_name:    targetTicket.name,
+      to_email:   targetTicket.email,
+      service:    targetTicket.service,
+      reply_text: text,
+      ticket_ref: targetTicket.id.substr(-4)
+    };
 
-      if (ok && data.success) {
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_REPLY, templateParams)
+      .then(() => {
+        replyBtn.textContent = originalLabel;
+        replyBtn.disabled    = false;
         statusEl.textContent = `✓ Reply emailed to ${targetTicket.email} successfully.`;
         statusEl.style.color = '#166534';
-        console.log('Admin reply emailed:', data.message);
-      } else {
-        statusEl.textContent = `⚠ Reply saved locally but email failed: ${data.error || 'Unknown error'}`;
+      })
+      .catch(err => {
+        replyBtn.textContent = originalLabel;
+        replyBtn.disabled    = false;
+        statusEl.textContent = `⚠ Reply saved locally but email failed: ${err.text || err.message || 'Unknown error'}`;
         statusEl.style.color = '#b91c1c';
-        console.error('Email relay error:', data.error);
-      }
-    })
-    .catch(networkErr => {
-      replyBtn.textContent = originalLabel;
-      replyBtn.disabled    = false;
-      statusEl.textContent = `⚠ Network error — reply saved locally but email not sent: ${networkErr.message}`;
-      statusEl.style.color = '#b91c1c';
-      console.error('Fetch failed:', networkErr);
-    });
+        console.error('EmailJS admin reply error:', err);
+      });
 
     // 4. UI Refresh (happens immediately regardless of email result)
     renderTickets();

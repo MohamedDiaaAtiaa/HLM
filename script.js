@@ -7,6 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── State ───
   let currentLang = 'ar';
 
+  // ═══════════════════════════════════════════════════
+  // EMAILJS CONFIGURATION
+  // 1. Go to https://www.emailjs.com and create a free account
+  // 2. Add an Email Service (Gmail, Outlook, etc.) → copy Service ID
+  // 3. Create an Email Template → copy Template ID
+  // 4. Go to Account → API Keys → copy your Public Key
+  // Then paste all three below:
+  // ═══════════════════════════════════════════════════
+  const EMAILJS_PUBLIC_KEY       = 'YOUR_PUBLIC_KEY';        // e.g. 'abc123XYZ'
+  const EMAILJS_SERVICE_ID       = 'YOUR_SERVICE_ID';        // e.g. 'service_xxxxxx'
+  const EMAILJS_TEMPLATE_CONTACT = 'YOUR_TEMPLATE_ID';       // e.g. 'template_xxxxxx'
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
   // ─── DOM References ───
   const body = document.body;
   const html = document.documentElement;
@@ -290,75 +304,93 @@ document.addEventListener('DOMContentLoaded', () => {
   // ═══════════════════════════════════════════════════
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const submitBtn = contactForm.querySelector('.btn-submit');
       const statusDiv = document.getElementById('formStatus');
-      const btnText = submitBtn.querySelector('span');
-      
-      const originalText = btnText.textContent;
-      const sendingText = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
-      const successText = currentLang === 'ar' ? 'تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.' : 'Your message has been sent successfully. We will contact you soon.';
-      
-      // Visual feedback
-      btnText.textContent = sendingText;
-      submitBtn.style.opacity = '0.7';
-      submitBtn.style.pointerEvents = 'none';
-      statusDiv.textContent = '';
-      statusDiv.className = 'form-status';
+      const btnText   = submitBtn.querySelector('span');
 
-      // ─── TICKET SYSTEM INTEGRATION ───
+      const originalText = btnText.textContent;
+      const sendingText  = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
+      const successText  = currentLang === 'ar'
+        ? '✓ تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.'
+        : '✓ Your message was sent successfully. We will be in touch soon.';
+      const errorText    = currentLang === 'ar'
+        ? '⚠ حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة.'
+        : '⚠ Something went wrong. Please try again or contact us directly.';
+
+      // ── Loading state ──────────────────────────────
+      btnText.textContent           = sendingText;
+      submitBtn.style.opacity       = '0.7';
+      submitBtn.style.pointerEvents = 'none';
+      statusDiv.textContent         = '';
+      statusDiv.className           = 'form-status';
+
+      // ── Collect & save ticket ──────────────────────
       const ticketData = {
-        id: 'TKT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
+        id:      'TKT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        name:    document.getElementById('name').value.trim(),
+        phone:   document.getElementById('phone').value.trim(),
+        email:   document.getElementById('email').value.trim(),
         service: document.getElementById('service').value,
-        message: document.getElementById('message').value,
-        date: new Date().toLocaleString(),
-        status: 'new',
+        message: document.getElementById('message').value.trim(),
+        date:    new Date().toLocaleString(),
+        status:  'new',
         history: []
       };
 
-      // Save to persistence (Local Storage for this demo)
       const tickets = JSON.parse(localStorage.getItem('hlm_tickets') || '[]');
       tickets.unshift(ticketData);
       localStorage.setItem('hlm_tickets', JSON.stringify(tickets));
 
-      // Send automatic notification to info@hlm-legal.com
-      fetch('sender.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: 'info@hlm-legal.com',
-          subject: `New Client Inquiry: ${ticketData.name}`,
-          message: `You have received a new inquiry via the website.\n\nName: ${ticketData.name}\nEmail: ${ticketData.email}\nPhone: ${ticketData.phone}\nService: ${ticketData.service}\n\nMessage:\n${ticketData.message}`,
-          from_name: 'HLM Website'
-        })
-      });
+      // ── Send via EmailJS ───────────────────────────
+      // Template variables must match the placeholders inside your EmailJS template:
+      //   {{from_name}}  {{from_email}}  {{phone}}  {{service}}  {{message}}  {{ticket_id}}
+      const templateParams = {
+        from_name:  ticketData.name,
+        from_email: ticketData.email,
+        phone:      ticketData.phone,
+        service:    ticketData.service,
+        message:    ticketData.message,
+        ticket_id:  ticketData.id,
+        to_email:   'info@hlm-legal.com'
+      };
 
-      console.log('Sending automatic notification to info@hlm-legal.com...');
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CONTACT, templateParams);
 
-      setTimeout(() => {
-        btnText.textContent = originalText;
-        submitBtn.style.opacity = '1';
+        // ── Success ────────────────────────────────
+        btnText.textContent           = originalText;
+        submitBtn.style.opacity       = '1';
         submitBtn.style.pointerEvents = 'auto';
-        
-        statusDiv.textContent = successText;
+        statusDiv.textContent         = successText;
         statusDiv.classList.add('success');
-        
         contactForm.reset();
-        
-        // Hide success message after 5 seconds
+
         setTimeout(() => {
           statusDiv.textContent = '';
           statusDiv.classList.remove('success');
-        }, 5000);
-      }, 1500);
+        }, 7000);
+
+      } catch (err) {
+        // ── Failure ────────────────────────────────
+        console.error('EmailJS send failed:', err);
+        btnText.textContent           = originalText;
+        submitBtn.style.opacity       = '1';
+        submitBtn.style.pointerEvents = 'auto';
+        statusDiv.textContent         = errorText;
+        statusDiv.classList.add('error');
+
+        setTimeout(() => {
+          statusDiv.textContent = '';
+          statusDiv.classList.remove('error');
+        }, 9000);
+      }
     });
   }
 
   // Initial navbar check
   updateNavbar();
 });
+
