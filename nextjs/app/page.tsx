@@ -142,13 +142,7 @@ export default function Home() {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`} id="navbar">
         <div className="nav-container">
           <Link href="#" className="nav-logo" onClick={(e) => handleNavClick(e, 'hero')}>
-            <Image src="/images/Logo.png" alt="HLM Logo" width={42} height={42} className="nav-logo-img" loading="eager" priority />
-            <div className="nav-logo-text">
-              <span className="logo-text">H.L.M</span>
-              <span className="logo-sub">
-                {lang === 'ar' ? 'محامون ومستشارون قانونيون' : 'Law Advocates & Legal Consultants'}
-              </span>
-            </div>
+            <Image src="/images/Logo.png" alt="HLM Logo — حسن ومراد، محامون ومستشارون قانونيون" width={360} height={130} className="nav-logo-img" loading="eager" priority />
           </Link>
 
           <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`} id="nav-links">
@@ -514,11 +508,7 @@ export default function Home() {
           <div className="footer-grid">
             <div className="footer-brand">
               <div className="footer-logo">
-                <Image src="/images/Logo.png" alt="HLM Logo" width={42} height={42} className="footer-logo-img" />
-                <div className="footer-logo-text">
-                  <span className="logo-text">H.L.M</span>
-                  <span className="logo-sub">{lang === 'ar' ? 'محامون ومستشارون قانونيون' : 'Law Advocates & Legal Consultants'}</span>
-                </div>
+                <Image src="/images/Logo.png" alt="HLM Logo — حسن ومراد، محامون ومستشارون قانونيون" width={440} height={160} className="footer-logo-img" />
               </div>
               <p className="footer-tagline">{lang === 'ar' ? 'شريكك القانوني لحماية أعمالك واستثماراتك' : 'Your Legal Partner to Protect Your Business & Investments'}</p>
             </div>
