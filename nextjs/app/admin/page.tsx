@@ -169,24 +169,24 @@ export default function AdminDashboard() {
   const openTicket = (ticket: any) => {
     setSelectedTicket(ticket);
     const greeting = ticket.lang === 'ar' ? 'أهلاً بك' : 'Dear';
-    setReplyText(`${greeting} ${ticket.name},\n\nThank you for reaching out to HLM Law Advocates regarding your inquiry about ${ticket.service}.\n\n[Your response here]\n\nBest regards,\nHLM Law Advocates Team`);
+    setReplyText(`${greeting} ${ticket.name},\n\nThank you for reaching out to HM Law Advocates regarding your inquiry about ${ticket.service}.\n\n[Your response here]\n\nBest regards,\nHM Law Advocates Team`);
     setReplyStatus({ message: '', type: '' });
   };
 
   const AdminLayoutStyling = `
     .admin-body { background-color: #f8fafc; color: #1e293b; font-family: var(--font-body-en); direction: ltr; min-height: 100vh;}
     .admin-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-    .sidebar { background: #0B1C2C; color: white; padding: 2rem; display: flex; flex-direction: column; gap: 2rem; }
-    .sidebar-logo { display: flex; align-items: center; gap: 1rem; font-weight: 700; font-size: 1.2rem; color: #C6A85C; }
+    .sidebar { background: #1E1E1E; color: white; padding: 2rem; display: flex; flex-direction: column; gap: 2rem; }
+    .sidebar-logo { display: flex; align-items: center; gap: 1rem; font-weight: 700; font-size: 1.2rem; color: #C0A020; }
     .sidebar-nav { display: flex; flex-direction: column; gap: 0.5rem; }
     .nav-item { padding: 0.75rem 1rem; border-radius: 4px; color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.2s; }
-    .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: white; border-left: 3px solid #C6A85C; }
+    .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: white; border-left: 3px solid #C0A020; }
     .main-content { padding: 2rem 3rem; }
     .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-    .content-title { font-size: 2rem; font-weight: 700; color: #0B1C2C; }
+    .content-title { font-size: 2rem; font-weight: 700; color: #1E1E1E; }
     .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
     .stat-card { background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; }
-    .stat-val { font-size: 1.5rem; font-weight: 700; color: #0B1C2C; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; color: #1E1E1E; }
     .stat-name { font-size: 0.85rem; color: #64748b; margin-top: 0.25rem; }
     .tickets-table-container { background: white; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -202,8 +202,8 @@ export default function AdminDashboard() {
     .modal-body { padding: 2rem; overflow-y: auto; flex: 1; }
     .modal-footer { padding: 1.5rem 2rem; background: #f8fafc; border-top: 1px solid #e2e8f0; }
     .message-bubble { background: #f1f5f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; line-height: 1.6; }
-    .admin-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #C6A85C; margin-bottom: 0.5rem; display: block; }
-    .history-item { border-left: 2px solid #C6A85C; padding-left: 1.5rem; margin-top: 1.5rem; font-size: 0.9rem; color: #475569; }
+    .admin-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #C0A020; margin-bottom: 0.5rem; display: block; }
+    .history-item { border-left: 2px solid #C0A020; padding-left: 1.5rem; margin-top: 1.5rem; font-size: 0.9rem; color: #475569; }
     textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 1rem; font-family: inherit; margin-bottom: 1rem; resize: vertical; min-height: 120px; }
   `;
 
@@ -211,10 +211,10 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="admin-body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#0B1C2C' }}>
+      <div className="admin-body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#1E1E1E' }}>
         <div style={{ background: 'white', padding: '3rem', borderRadius: '12px', width: '100%', maxWidth: '400px', textAlign: 'center' }}>
-          <Image src="/images/Logo.png" alt="HLM" width={60} height={60} style={{ marginBottom: '1.5rem' }} />
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', color: '#0B1C2C' }}>Admin Access</h1>
+          <Image src="/images/Logo-light.png" alt="HM" width={60} height={60} style={{ marginBottom: '1.5rem' }} />
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', color: '#1E1E1E' }}>Admin Access</h1>
           <form onSubmit={handleLogin}>
             <div className="form-group" style={{ marginBottom: '1rem' }}>
               <input type="text" name="username" className="form-control" placeholder="Username" required />
@@ -241,7 +241,7 @@ export default function AdminDashboard() {
         <aside className="sidebar">
           <div className="sidebar-logo">
             <Image src="/images/Logo.png" alt="" width={32} height={32} />
-            <span>HLM Portal</span>
+            <span>HM Portal</span>
           </div>
           <nav className="sidebar-nav">
             <div className={`nav-item ${activeTab === 'tickets' ? 'active' : ''}`} onClick={() => setActiveTab('tickets')}>Inquiry Tickets</div>

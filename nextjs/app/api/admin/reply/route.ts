@@ -49,13 +49,13 @@ export async function POST(req: Request) {
 
     // Send the email via Resend
     const subjectContent = ticket.lang === 'ar' 
-      ? `رد رسمي: HLM للاستشارات القانونية — المرجع #${ticket.id.split('-')[1]}`
-      : `Official Response: HLM Law Advocates — Ref #${ticket.id.split('-')[1]}`;
+      ? `رد رسمي: H.M للاستشارات القانونية — المرجع #${ticket.id.split('-')[1]}`
+      : `Official Response: HM Law Advocates — Ref #${ticket.id.split('-')[1]}`;
 
     const htmlContent = getClientReplyEmail(replyText, ticket.lang);
 
     await resend.emails.send({
-      from: `HLM Law Advocates <${fromEmail}>`,
+      from: `HM Law Advocates <${fromEmail}>`,
       to: ticket.email,
       subject: subjectContent,
       html: htmlContent

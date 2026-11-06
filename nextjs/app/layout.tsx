@@ -22,14 +22,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'HLM Legal | Hassan, Loqman & Mourad — محامون ومستشارون قانونيون',
-  description: 'HLM Legal (Hassan, Loqman & Mourad) - Leading law advocates and legal consultants in Egypt and the Gulf. Specialized in corporate law, arbitration, and commercial disputes. H.L.M شريكك القانوني لحماية أعمالك واستثماراتك.',
-  keywords: 'HLM Legal, hlm-legal, Hassan Loqman Mourad, H.L.M, حسن ولقمان ومراد, محامي, استشارات قانونية, قانون تجاري, شركات, عقارات, تحكيم, مصر, الخليج, Law firm Cairo',
+  title: 'HM Legal | Hassan & Mourad — محامون ومستشارون قانونيون',
+  description: 'HM Legal (Hassan & Mourad) - Leading law advocates and legal consultants in Egypt and the Gulf. Specialized in corporate law, arbitration, and commercial disputes. H.M شريكك القانوني لحماية أعمالك واستثماراتك.',
+  keywords: 'HM Legal, hlm-legal, Hassan Mourad, H.M, حسن ومراد, محامي, استشارات قانونية, قانون تجاري, شركات, عقارات, تحكيم, مصر, الخليج, Law firm Cairo',
   openGraph: {
-    title: 'HLM Legal | Hassan, Loqman & Mourad — Law Advocates',
-    description: 'HLM Legal - Your Legal Partner to Protect Your Business & Investments. Specialized legal consultancy in Egypt & the Gulf.',
+    title: 'HM Legal | Hassan & Mourad — Law Advocates',
+    description: 'HM Legal - Your Legal Partner to Protect Your Business & Investments. Specialized legal consultancy in Egypt & the Gulf.',
     url: 'https://hlm-legal.com',
-    siteName: 'HLM Legal',
+    siteName: 'HM Legal',
     images: [{
       url: 'https://hlm-legal.com/images/Logo.png',
       width: 800,
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HLM Legal | Hassan, Loqman & Mourad',
+    title: 'HM Legal | Hassan & Mourad',
     description: 'Expert Law Advocates & Legal Consultants in Egypt and the Gulf Region.',
     images: ['https://hlm-legal.com/images/Logo.png'],
   },

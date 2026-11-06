@@ -1,20 +1,20 @@
 /* ═══════════════════════════════════════════════════════════
-   HLM LAW ADVOCATES — Premium Legal Website
+   HM LAW ADVOCATES — Hassan & Mourad | Premium Legal Website
    Design System & Full Stylesheet
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── CSS Custom Properties ─── */
 :root {
   /* Colors */
-  --navy-deep: #0B1C2C;
-  --navy-secondary: #0F2A3F;
-  --navy-dark: #081520;
-  --navy-light: #132D44;
-  --gold: #C6A85C;
-  --gold-light: #E5C97A;
-  --gold-gradient: linear-gradient(135deg, #C6A85C, #E5C97A);
-  --gold-subtle: rgba(198, 168, 92, 0.08);
-  --gold-border: rgba(198, 168, 92, 0.15);
+  --ink-deep: #1E1E1E;
+  --ink-secondary: #262626;
+  --ink-dark: #141414;
+  --ink-light: #333333;
+  --gold: #C0A020;
+  --gold-light: #D8BC55;
+  --gold-gradient: linear-gradient(135deg, #C0A020, #D8BC55);
+  --gold-subtle: rgba(192, 160, 32, 0.08);
+  --gold-border: rgba(192, 160, 32, 0.15);
   --white: #FFFFFF;
   --white-90: rgba(255, 255, 255, 0.9);
   --white-70: rgba(255, 255, 255, 0.7);
@@ -73,7 +73,7 @@ html {
 
 body {
   font-family: var(--font-ar);
-  background-color: var(--navy-deep);
+  background-color: var(--ink-deep);
   color: var(--white-90);
   line-height: 1.8;
   overflow-x: hidden;
@@ -209,7 +209,7 @@ body.ltr .section-header .section-label::after {
 }
 
 .navbar.scrolled {
-  background: rgba(11, 28, 44, 0.95);
+  background: rgba(30, 30, 30, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: 0.75rem 0;
@@ -382,7 +382,7 @@ body.ltr .nav-links a::after {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: var(--navy-deep);
+  background: var(--ink-deep);
 }
 
 .hero-bg-pattern {
@@ -394,15 +394,15 @@ body.ltr .nav-links a::after {
       0deg,
       transparent,
       transparent 100px,
-      rgba(198, 168, 92, 0.3) 100px,
-      rgba(198, 168, 92, 0.3) 101px
+      rgba(192, 160, 32, 0.3) 100px,
+      rgba(192, 160, 32, 0.3) 101px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
       transparent 100px,
-      rgba(198, 168, 92, 0.3) 100px,
-      rgba(198, 168, 92, 0.3) 101px
+      rgba(192, 160, 32, 0.3) 100px,
+      rgba(192, 160, 32, 0.3) 101px
     );
 }
 
@@ -410,24 +410,24 @@ body.ltr .nav-links a::after {
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(ellipse at 30% 20%, rgba(198, 168, 92, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(15, 42, 63, 0.8) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(11, 28, 44, 0) 0%, rgba(11, 28, 44, 0.4) 100%);
+    radial-gradient(ellipse at 30% 20%, rgba(192, 160, 32, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(38, 38, 38, 0.8) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(30, 30, 30, 0) 0%, rgba(30, 30, 30, 0.4) 100%);
   animation: heroGlow 8s ease-in-out infinite alternate;
 }
 
 @keyframes heroGlow {
   0% {
     background: 
-      radial-gradient(ellipse at 30% 20%, rgba(198, 168, 92, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 80%, rgba(15, 42, 63, 0.8) 0%, transparent 50%),
-      linear-gradient(180deg, rgba(11, 28, 44, 0) 0%, rgba(11, 28, 44, 0.4) 100%);
+      radial-gradient(ellipse at 30% 20%, rgba(192, 160, 32, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(38, 38, 38, 0.8) 0%, transparent 50%),
+      linear-gradient(180deg, rgba(30, 30, 30, 0) 0%, rgba(30, 30, 30, 0.4) 100%);
   }
   100% {
     background: 
-      radial-gradient(ellipse at 50% 30%, rgba(198, 168, 92, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 30% 70%, rgba(15, 42, 63, 0.8) 0%, transparent 50%),
-      linear-gradient(180deg, rgba(11, 28, 44, 0) 0%, rgba(11, 28, 44, 0.4) 100%);
+      radial-gradient(ellipse at 50% 30%, rgba(192, 160, 32, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 70%, rgba(38, 38, 38, 0.8) 0%, transparent 50%),
+      linear-gradient(180deg, rgba(30, 30, 30, 0) 0%, rgba(30, 30, 30, 0.4) 100%);
   }
 }
 
@@ -620,7 +620,7 @@ body.ltr .hero-visual {
 
 .btn-primary {
   background: var(--gold-gradient);
-  color: var(--navy-deep);
+  color: var(--ink-deep);
   border: none;
 }
 
@@ -628,7 +628,7 @@ body.ltr .hero-visual {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #E5C97A, #C6A85C);
+  background: linear-gradient(135deg, #D8BC55, #C0A020);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -639,7 +639,7 @@ body.ltr .hero-visual {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(198, 168, 92, 0.25);
+  box-shadow: 0 8px 30px rgba(192, 160, 32, 0.25);
 }
 
 .btn-primary span,
@@ -658,14 +658,14 @@ body.ltr .hero-visual {
   border-color: var(--gold);
   color: var(--gold);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(198, 168, 92, 0.1);
+  box-shadow: 0 8px 30px rgba(192, 160, 32, 0.1);
 }
 
 /* ═══════════════════════════════════════════════════════════
    ABOUT SECTION
    ═══════════════════════════════════════════════════════════ */
 .about {
-  background: var(--navy-secondary);
+  background: var(--ink-secondary);
 }
 
 .about-grid {
@@ -745,7 +745,7 @@ body.ltr .hero-visual {
   left: 0;
   width: 60%;
   height: 60%;
-  background: radial-gradient(ellipse at center, rgba(198, 168, 92, 0.05) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(192, 160, 32, 0.05) 0%, transparent 70%);
 }
 
 .about-logo-img {
@@ -757,14 +757,14 @@ body.ltr .hero-visual {
   display: block;
   margin: auto;
   padding-top: 18%;
-  filter: drop-shadow(0 10px 40px rgba(198, 168, 92, 0.15));
+  filter: drop-shadow(0 10px 40px rgba(192, 160, 32, 0.15));
 }
 
 /* ═══════════════════════════════════════════════════════════
    SERVICES SECTION
    ═══════════════════════════════════════════════════════════ */
 .services {
-  background: var(--navy-deep);
+  background: var(--ink-deep);
 }
 
 .services-grid {
@@ -776,7 +776,7 @@ body.ltr .hero-visual {
 .service-card {
   position: relative;
   padding: var(--space-xl) var(--space-lg);
-  background: var(--navy-secondary);
+  background: var(--ink-secondary);
   border: 1px solid var(--white-05);
   border-radius: var(--radius-md);
   transition: all var(--transition-medium);
@@ -804,7 +804,7 @@ body.ltr .service-card::before {
   transform: translateY(-6px);
   border-color: var(--gold-border);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
-              0 0 40px rgba(198, 168, 92, 0.05);
+              0 0 40px rgba(192, 160, 32, 0.05);
 }
 
 .service-card:hover::before {
@@ -854,7 +854,7 @@ body.ltr .service-card::before {
    WHY US SECTION
    ═══════════════════════════════════════════════════════════ */
 .why-us {
-  background: var(--navy-secondary);
+  background: var(--ink-secondary);
 }
 
 .why-grid {
@@ -871,7 +871,7 @@ body.ltr .service-card::before {
 }
 
 .why-item:hover {
-  background: rgba(198, 168, 92, 0.03);
+  background: rgba(192, 160, 32, 0.03);
   border-color: var(--gold-border);
 }
 
@@ -906,7 +906,7 @@ body.ltr .service-card::before {
    VISION SECTION
    ═══════════════════════════════════════════════════════════ */
 .vision {
-  background: var(--navy-deep);
+  background: var(--ink-deep);
   padding: var(--space-4xl) 0;
 }
 
@@ -948,7 +948,7 @@ body.ltr .vision-quote {
    CONTACT SECTION
    ═══════════════════════════════════════════════════════════ */
 .contact-section {
-  background: var(--navy-dark);
+  background: var(--ink-dark);
   padding: var(--space-3xl) 0;
   position: relative;
   overflow: hidden;
@@ -961,14 +961,14 @@ body.ltr .vision-quote {
   right: 0;
   width: 50%;
   height: 100%;
-  background: radial-gradient(ellipse at top right, rgba(198, 168, 92, 0.05) 0%, transparent 60%);
+  background: radial-gradient(ellipse at top right, rgba(192, 160, 32, 0.05) 0%, transparent 60%);
   pointer-events: none;
 }
 
 body.ltr .contact-section::before {
   right: auto;
   left: 0;
-  background: radial-gradient(ellipse at top left, rgba(198, 168, 92, 0.05) 0%, transparent 60%);
+  background: radial-gradient(ellipse at top left, rgba(192, 160, 32, 0.05) 0%, transparent 60%);
 }
 
 .contact-wrapper {
@@ -1004,7 +1004,7 @@ body.ltr .contact-section::before {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-sm);
-  background: rgba(198, 168, 92, 0.1);
+  background: rgba(192, 160, 32, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1039,7 +1039,7 @@ body.ltr .contact-section::before {
 
 .contact-form-container {
   flex: 1;
-  background: var(--navy-secondary);
+  background: var(--ink-secondary);
   padding: var(--space-xl);
   border-radius: var(--radius-md);
   border: 1px solid var(--white-05);
@@ -1075,7 +1075,7 @@ body.ltr .contact-section::before {
 }
 
 .form-control {
-  background: rgba(11, 28, 44, 0.6);
+  background: rgba(30, 30, 30, 0.6);
   border: 1px solid var(--white-10);
   border-radius: var(--radius-sm);
   padding: 0.9rem 1rem;
@@ -1088,8 +1088,8 @@ body.ltr .contact-section::before {
 .form-control:focus {
   outline: none;
   border-color: var(--gold);
-  background: rgba(11, 28, 44, 0.9);
-  box-shadow: 0 0 0 3px rgba(198, 168, 92, 0.1);
+  background: rgba(30, 30, 30, 0.9);
+  box-shadow: 0 0 0 3px rgba(192, 160, 32, 0.1);
 }
 
 .form-control::placeholder {
@@ -1098,7 +1098,7 @@ body.ltr .contact-section::before {
 
 select.form-control {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C6A85C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C0A020' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: left 1rem center;
   background-size: 1em;
@@ -1112,7 +1112,7 @@ body.ltr select.form-control {
 }
 
 select.form-control option {
-  background: var(--navy-secondary);
+  background: var(--ink-secondary);
   color: var(--white);
 }
 
@@ -1141,7 +1141,7 @@ body.rtl .rtl-flip {
 /* ─── Location Box ─── */
 .location-box {
   margin-top: var(--space-xl);
-  background: var(--navy-secondary);
+  background: var(--ink-secondary);
   border: 1px solid var(--gold-border);
   border-radius: var(--radius-md);
   padding: 1.5rem;
@@ -1284,7 +1284,7 @@ body.ltr .whatsapp-float {
    FOOTER
    ═══════════════════════════════════════════════════════════ */
 .footer {
-  background: var(--navy-dark);
+  background: var(--ink-dark);
   padding-top: 0;
   position: relative;
 }
@@ -1429,7 +1429,7 @@ body.ltr .whatsapp-float {
     width: 80%;
     max-width: 320px;
     height: 100vh;
-    background: var(--navy-dark);
+    background: var(--ink-dark);
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -1616,7 +1616,7 @@ body.ltr .whatsapp-float {
    SELECTION & SCROLLBAR
    ═══════════════════════════════════════════════════════════ */
 ::selection {
-  background: rgba(198, 168, 92, 0.3);
+  background: rgba(192, 160, 32, 0.3);
   color: var(--white);
 }
 
@@ -1626,7 +1626,7 @@ body.ltr .whatsapp-float {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--navy-dark);
+  background: var(--ink-dark);
 }
 
 ::-webkit-scrollbar-thumb {

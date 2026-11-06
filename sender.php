@@ -1,6 +1,6 @@
 <?php
 /* ═══════════════════════════════════════════════════════════
-   HLM LAW ADVOCATES — Email Relay (sender.php)
+   HM LAW ADVOCATES — Email Relay (sender.php)
    Handles contact form notifications & admin replies
    ═══════════════════════════════════════════════════════════ */
 
@@ -71,9 +71,9 @@ function sanitize(string $val): string {
 }
 
 $to        = filter_var($data['to'] ?? '', FILTER_VALIDATE_EMAIL);
-$subject   = sanitize($data['subject']   ?? 'New Inquiry — HLM Law Advocates');
+$subject   = sanitize($data['subject']   ?? 'New Inquiry — HM Law Advocates');
 $body_text = sanitize($data['message']   ?? '');
-$from_name = sanitize($data['from_name'] ?? 'HLM Website');
+$from_name = sanitize($data['from_name'] ?? 'HM Website');
 $firm_email = 'info@hlm-legal.com';
 
 if (!$to) {
@@ -99,8 +99,8 @@ $email_body = '<!DOCTYPE html>
     body  { font-family: "Segoe UI", Arial, sans-serif; background:#f8fafc; margin:0; padding:0; color:#1e293b; }
     .wrap { max-width:620px; margin:30px auto; background:#fff; border-radius:8px;
             border:1px solid #e2e8f0; box-shadow:0 4px 20px rgba(0,0,0,.06); overflow:hidden; }
-    .hdr  { background:#0B1C2C; padding:24px 32px; }
-    .hdr h2 { color:#C6A85C; margin:0; font-size:1.2rem; letter-spacing:.05em; }
+    .hdr  { background:#1E1E1E; padding:24px 32px; }
+    .hdr h2 { color:#C0A020; margin:0; font-size:1.2rem; letter-spacing:.05em; }
     .hdr p  { color:rgba(255,255,255,.6); margin:4px 0 0; font-size:.8rem; }
     .bdy  { padding:32px; line-height:1.8; font-size:.95rem; color:#334155; }
     .ftr  { background:#f1f5f9; padding:16px 32px; font-size:.78rem; color:#64748b;
@@ -110,11 +110,11 @@ $email_body = '<!DOCTYPE html>
 <body>
   <div class="wrap">
     <div class="hdr">
-      <h2>H.L.M &mdash; &#x62D;&#x633;&#x646; &#x648;&#x644;&#x642;&#x645;&#x627;&#x646; &#x648;&#x645;&#x631;&#x627;&#x62F;</h2>
+      <h2>H.M &mdash; &#x62D;&#x633;&#x646; &#x648;&#x645;&#x631;&#x627;&#x62F;</h2>
       <p>LAW ADVOCATES &amp; LEGAL CONSULTANTS</p>
     </div>
     <div class="bdy">' . $html_message . '</div>
-    <div class="ftr">&copy; ' . $year . ' HLM Law Advocates &amp; Legal Consultants &mdash; All rights reserved.</div>
+    <div class="ftr">&copy; ' . $year . ' HM Law Advocates &amp; Legal Consultants &mdash; All rights reserved.</div>
   </div>
 </body>
 </html>';

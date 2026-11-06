@@ -24,12 +24,12 @@ export default function Home() {
       document.documentElement.setAttribute('lang', 'en');
       document.documentElement.setAttribute('dir', 'ltr');
       document.body.classList.add('ltr');
-      document.title = 'HLM Law Advocates & Legal Consultants | H.L.M';
+      document.title = 'HM Law Advocates & Legal Consultants | H.M';
     } else {
       document.documentElement.setAttribute('lang', 'ar');
       document.documentElement.setAttribute('dir', 'rtl');
       document.body.classList.remove('ltr');
-      document.title = 'H.L.M للاستشارات القانونية | HLM Law Advocates & Legal Consultants';
+      document.title = 'H.M للاستشارات القانونية | HM Law Advocates & Legal Consultants';
     }
   }, [lang]);
 
@@ -142,7 +142,7 @@ export default function Home() {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`} id="navbar">
         <div className="nav-container">
           <Link href="#" className="nav-logo" onClick={(e) => handleNavClick(e, 'hero')}>
-            <Image src="/images/Logo.png" alt="HLM Logo — حسن ومراد، محامون ومستشارون قانونيون" width={360} height={130} className="nav-logo-img" loading="eager" priority />
+            <Image src="/images/Logo.png" alt="HM Logo — حسن ومراد، محامون ومستشارون قانونيون" width={360} height={130} className="nav-logo-img" loading="eager" priority />
           </Link>
 
           <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`} id="nav-links">
@@ -173,7 +173,7 @@ export default function Home() {
         <div className="hero-bg-pattern"></div>
         <div className="hero-gradient-overlay"></div>
         <div className="hero-watermark">
-          <Image src="/images/Logo.png" alt="HLM Law Firm Watermark" width={500} height={500} />
+          <Image src="/images/Logo.png" alt="HM Law Firm Watermark" width={500} height={500} />
         </div>
         <div className="hero-split">
           <div className="hero-content">
@@ -196,7 +196,7 @@ export default function Home() {
           </div>
           <div className="hero-visual">
             <div className="hero-banner-frame">
-              <Image src="/images/Banner - Hero.png" alt="Hero Banner" width={520} height={700} className="hero-banner-img" style={{ width: 'auto', height: '100%', objectFit: 'cover' }} priority />
+              <Image src="/images/Banner-Hero-v2.png" alt="Hero Banner" width={520} height={700} className="hero-banner-img" style={{ width: 'auto', height: '100%', objectFit: 'cover' }} priority />
               <div className="hero-banner-border"></div>
             </div>
           </div>
@@ -218,8 +218,8 @@ export default function Home() {
               )}
               <p className="about-text">
                 {lang === 'ar' ? 
-                  'H.L.M للاستشارات القانونية هو مكتب محاماة متخصص يقدم حلولاً قانونية استراتيجية في القانون التجاري، هيكلة الشركات، النزاعات العقارية، والتحكيم الدولي. نعمل مع مؤسسات ومستثمرين يسعون لحماية مصالحهم بأعلى معايير الاحترافية.' :
-                  'H.L.M Legal Consultants is a specialized law firm delivering strategic legal solutions in commercial law, corporate structuring, real estate disputes, and international arbitration. We serve institutions and investors seeking to protect their interests with the highest standards of professionalism.'
+                  'H.M للاستشارات القانونية هو مكتب محاماة متخصص يقدم حلولاً قانونية استراتيجية في القانون التجاري، هيكلة الشركات، النزاعات العقارية، والتحكيم الدولي. نعمل مع مؤسسات ومستثمرين يسعون لحماية مصالحهم بأعلى معايير الاحترافية.' :
+                  'H.M Legal Consultants is a specialized law firm delivering strategic legal solutions in commercial law, corporate structuring, real estate disputes, and international arbitration. We serve institutions and investors seeking to protect their interests with the highest standards of professionalism.'
                 }
               </p>
               <p className="about-text">
@@ -249,7 +249,7 @@ export default function Home() {
               <div className="about-visual-inner">
                 <div className="visual-frame"></div>
                 <div className="visual-accent"></div>
-                <Image src="/images/Logo.png" alt="HLM Monogram" width={200} height={200} className="about-logo-img" />
+                <Image src="/images/Logo.png" alt="HM Monogram" width={200} height={200} className="about-logo-img" />
               </div>
             </div>
           </div>
@@ -268,8 +268,8 @@ export default function Home() {
               <div className="service-icon">
                 {/* SVG 1 */}
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M24 4L40 12V20C40 31.05 33.18 41.22 24 44C14.82 41.22 8 31.05 8 20V12L24 4Z" stroke="#C6A85C" strokeWidth="1.5" />
-                  <path d="M18 24L22 28L30 20" stroke="#C6A85C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M24 4L40 12V20C40 31.05 33.18 41.22 24 44C14.82 41.22 8 31.05 8 20V12L24 4Z" stroke="#C0A020" strokeWidth="1.5" />
+                  <path d="M18 24L22 28L30 20" stroke="#C0A020" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               <h3 className="service-title">{lang === 'ar' ? 'القانون التجاري والشركات' : 'Commercial & Corporate Law'}</h3>
@@ -281,8 +281,8 @@ export default function Home() {
               <div className="service-icon">
                 {/* SVG 2 */}
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="24" cy="24" r="18" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <path d="M24 6V24L34 34" stroke="#C6A85C" strokeWidth="1.5" strokeLinecap="round"/>
+                  <circle cx="24" cy="24" r="18" stroke="#C0A020" strokeWidth="1.5"/>
+                  <path d="M24 6V24L34 34" stroke="#C0A020" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
               </div>
               <h3 className="service-title">{lang === 'ar' ? 'المنازعات التجارية والمدنية' : 'Commercial & Civil Disputes'}</h3>
@@ -294,9 +294,9 @@ export default function Home() {
               <div className="service-icon">
                 {/* SVG 3 */}
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 42V20L24 6L40 20V42H8Z" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <path d="M18 42V30H30V42" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="24" y1="20" x2="24" y2="26" stroke="#C6A85C" strokeWidth="1.5"/>
+                  <path d="M8 42V20L24 6L40 20V42H8Z" stroke="#C0A020" strokeWidth="1.5"/>
+                  <path d="M18 42V30H30V42" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="24" y1="20" x2="24" y2="26" stroke="#C0A020" strokeWidth="1.5"/>
                 </svg>
               </div>
               <h3 className="service-title">{lang === 'ar' ? 'القضايا العقارية والأراضي' : 'Real Estate & Land Disputes'}</h3>
@@ -308,10 +308,10 @@ export default function Home() {
               <div className="service-icon">
                 {/* SVG 4 */}
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M24 6L6 18V42H18V30H30V42H42V18L24 6Z" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="6" y1="42" x2="42" y2="42" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="24" y1="18" x2="24" y2="6" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <circle cx="24" cy="22" r="4" stroke="#C6A85C" strokeWidth="1.5"/>
+                  <path d="M24 6L6 18V42H18V30H30V42H42V18L24 6Z" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="6" y1="42" x2="42" y2="42" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="24" y1="18" x2="24" y2="6" stroke="#C0A020" strokeWidth="1.5"/>
+                  <circle cx="24" cy="22" r="4" stroke="#C0A020" strokeWidth="1.5"/>
                 </svg>
               </div>
               <h3 className="service-title">{lang === 'ar' ? 'التحكيم وتسوية المنازعات' : 'Arbitration & Dispute Resolution'}</h3>
@@ -323,13 +323,13 @@ export default function Home() {
               <div className="service-icon">
                  {/* SVG 5 */}
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="8" y="8" width="32" height="24" rx="2" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="8" y1="32" x2="40" y2="32" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="20" y1="32" x2="20" y2="40" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="28" y1="32" x2="28" y2="40" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <line x1="16" y1="40" x2="32" y2="40" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <circle cx="24" cy="20" r="6" stroke="#C6A85C" strokeWidth="1.5"/>
-                  <path d="M24 17V20L26 22" stroke="#C6A85C" strokeWidth="1" strokeLinecap="round"/>
+                  <rect x="8" y="8" width="32" height="24" rx="2" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="8" y1="32" x2="40" y2="32" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="20" y1="32" x2="20" y2="40" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="28" y1="32" x2="28" y2="40" stroke="#C0A020" strokeWidth="1.5"/>
+                  <line x1="16" y1="40" x2="32" y2="40" stroke="#C0A020" strokeWidth="1.5"/>
+                  <circle cx="24" cy="20" r="6" stroke="#C0A020" strokeWidth="1.5"/>
+                  <path d="M24 17V20L26 22" stroke="#C0A020" strokeWidth="1" strokeLinecap="round"/>
                 </svg>
               </div>
               <h3 className="service-title">{lang === 'ar' ? 'الاستشارات القانونية أونلاين' : 'Online Legal Consultations'}</h3>
@@ -508,7 +508,7 @@ export default function Home() {
           <div className="footer-grid">
             <div className="footer-brand">
               <div className="footer-logo">
-                <Image src="/images/Logo.png" alt="HLM Logo — حسن ومراد، محامون ومستشارون قانونيون" width={440} height={160} className="footer-logo-img" />
+                <Image src="/images/Logo.png" alt="HM Logo — حسن ومراد، محامون ومستشارون قانونيون" width={440} height={160} className="footer-logo-img" />
               </div>
               <p className="footer-tagline">{lang === 'ar' ? 'شريكك القانوني لحماية أعمالك واستثماراتك' : 'Your Legal Partner to Protect Your Business & Investments'}</p>
             </div>
@@ -521,7 +521,7 @@ export default function Home() {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>{lang === 'ar' ? '© 2026 حسن ولقمان ومراد — محامون ومستشارون قانونيون. جميع الحقوق محفوظة.' : '© 2026 Hassan, Loqman & Mourad — Law Advocates & Legal Consultants. All rights reserved.'}</p>
+            <p>{lang === 'ar' ? '© 2026 حسن ومراد — محامون ومستشارون قانونيون. جميع الحقوق محفوظة.' : '© 2026 Hassan & Mourad — Law Advocates & Legal Consultants. All rights reserved.'}</p>
           </div>
         </div>
       </footer>

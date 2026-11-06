@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   HLM LAW ADVOCATES — Admin JavaScript
+   HM LAW ADVOCATES — Admin JavaScript
    Authentication, Ticket Management, Replies
    ═══════════════════════════════════════════════════════════ */
 
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Compose header (email-draft style) ───────────
     const ref     = ticket.id.substr(-4);
-    const subject = `Official Response: HLM Law Advocates — Ref #${ref}`;
+    const subject = `Official Response: HM Law Advocates — Ref #${ref}`;
     document.getElementById('compose-to').textContent      = ticket.email;
     document.getElementById('compose-subject').textContent = subject;
 
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const existingText = document.getElementById('reply-text').value.trim();
     if (!existingText) {
       document.getElementById('reply-text').value =
-        `Dear ${ticket.name},\n\nThank you for reaching out to HLM Law Advocates regarding your inquiry about ${ticket.service}.\n\n[Your response here]\n\nBest regards,\nHLM Law Advocates Team`;
+        `Dear ${ticket.name},\n\nThank you for reaching out to HM Law Advocates regarding your inquiry about ${ticket.service}.\n\n[Your response here]\n\nBest regards,\nHM Law Advocates Team`;
     }
 
     // ── Reply history ────────────────────────────────
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ticket = freshTickets.find(t => t.id === currentTicketId);
     if (!ticket) return null;
     const bodyText = document.getElementById('reply-text').value.trim();
-    const subject  = `Official Response: HLM Law Advocates — Ref #${ticket.id.substr(-4)}`;
+    const subject  = `Official Response: HM Law Advocates — Ref #${ticket.id.substr(-4)}`;
     return { ticket, subject, bodyText };
   }
 

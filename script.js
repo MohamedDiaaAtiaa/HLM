@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   HLM LAW ADVOCATES — JavaScript
+   HM LAW ADVOCATES — JavaScript
    Language Toggle, Scroll Animations, Navigation
    ═══════════════════════════════════════════════════════════ */
 
@@ -78,17 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       if (lang === 'en') {
-        metaDesc.setAttribute('content', 'H.L.M Legal Consultants — Your legal partner to protect your business and investments. Comprehensive legal solutions in corporate, contracts, and disputes across Egypt and beyond.');
+        metaDesc.setAttribute('content', 'H.M Legal Consultants — Your legal partner to protect your business and investments. Comprehensive legal solutions in corporate, contracts, and disputes across Egypt and beyond.');
       } else {
-        metaDesc.setAttribute('content', 'H.L.M للاستشارات القانونية — شريكك القانوني لحماية أعمالك واستثماراتك. حلول قانونية متكاملة في الشركات، العقود، والمنازعات داخل مصر وخارجها.');
+        metaDesc.setAttribute('content', 'H.M للاستشارات القانونية — شريكك القانوني لحماية أعمالك واستثماراتك. حلول قانونية متكاملة في الشركات، العقود، والمنازعات داخل مصر وخارجها.');
       }
     }
 
     // Update page title
     if (lang === 'en') {
-      document.title = 'HLM Law Advocates & Legal Consultants | H.L.M';
+      document.title = 'HM Law Advocates & Legal Consultants | H.M';
     } else {
-      document.title = 'H.L.M للاستشارات القانونية | HLM Law Advocates & Legal Consultants';
+      document.title = 'H.M للاستشارات القانونية | HM Law Advocates & Legal Consultants';
     }
   }
 

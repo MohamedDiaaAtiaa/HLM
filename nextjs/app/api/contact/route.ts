@@ -37,15 +37,15 @@ export async function POST(req: Request) {
     
     // a. To Client
     const clientSubject = lang === 'ar' 
-      ? 'شكراً للتواصل معنا — H.L.M' 
-      : "Thank you for contacting HLM Law — We'll be in touch";
+      ? 'شكراً للتواصل معنا — H.M' 
+      : "Thank you for contacting HM Law — We'll be in touch";
       
     const clientHtml = lang === 'ar' 
       ? getClientConfirmationEmailAR(name, service) 
       : getClientConfirmationEmailEN(name, service);
 
     const emailClientPromise = resend.emails.send({
-      from: `HLM Law Advocates <${fromEmail}>`,
+      from: `HM Law Advocates <${fromEmail}>`,
       to: email,
       subject: clientSubject,
       html: clientHtml
@@ -54,9 +54,9 @@ export async function POST(req: Request) {
     // b. To Admin
     const adminHtml = getAdminNotificationEmail(ticket);
     const emailAdminPromise = resend.emails.send({
-      from: `HLM Website <${fromEmail}>`,
+      from: `HM Website <${fromEmail}>`,
       to: 'info@hlm-legal.com', // Admin email
-      subject: `New Inquiry: HLM Law Advocates — ${ticket.id}`,
+      subject: `New Inquiry: HM Law Advocates — ${ticket.id}`,
       html: adminHtml
     });
 
